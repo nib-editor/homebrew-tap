@@ -1,0 +1,28 @@
+# Keeps Formula/nib.rb at nib's latest release: daily, and by hand.
+name: update
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 update.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Commit if it changed
+        run: |
+          git add Formula/nib.rb
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          version=$(sed -n 's/^  version "\(.*\)"/\1/p' Formula/nib.rb)
+          git commit -m "nib $version"
+          git push
