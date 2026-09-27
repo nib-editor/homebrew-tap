@@ -69,7 +69,7 @@ def formula(tag, hashes):
         "  end\n"
         "\n"
         "  test do\n"
-        '    assert_match "usage: nib", shell_output("#{bin}/nib --help")\n'
+        '    assert_match version.to_s, shell_output("#{bin}/nib --version")\n'
         "  end\n"
         "end\n"
     )
