@@ -19,6 +19,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Commit if it changed
         run: |
+          # Before nib's first release, update.py writes nothing.
+          [ -e Formula/nib.rb ] || exit 0
           git add Formula/nib.rb
           git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
